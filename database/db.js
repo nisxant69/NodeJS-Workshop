@@ -1,15 +1,22 @@
 //Database Connection
-const {Sequelize} = require("sequelize")
+const {Sequelize} = require("sequelize")  //Sequelize  bata db connection table banauna milxa
+require("dotenv").config()
+console.log(process.env.password)
+const sequelize = new Sequelize({
+    database:process.env.database_name,
+    username: process.env.db_username,
+    password: process.env.db_password,
+    port: process.env.db_port,
+    host: process.env.db_host,
+    dialect: "mysql"
+})
 
-const sequelize = new Sequelize('localhost','ecommerce_db','password')  //Making object from Sequelize class
+sequelize.authenticate()
+.then(()=>{
+    console.log("Connected Successfully")
+})
+.catch((err)=>{
+    console.log("Error Occured", err);
+})
 
-
-// const info={
-//     name:"Nishant",
-//     age:20
-// }
-
-// const name = info.name
-// const age = info.age
-// //Destructure
-// const {name,age}=info
+module.exports=sequelize;
