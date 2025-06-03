@@ -1,6 +1,7 @@
 //Database Connection
-const {Sequelize} = require("sequelize")  //Sequelize  bata db connection table banauna milxa
+const {Sequelize,DataTypes} = require("sequelize")  //Sequelize  bata db connection table banauna milxa
 require("dotenv").config()
+require("./../models/blogModel")
 console.log(process.env.password)
 const sequelize = new Sequelize({
     database:process.env.database_name,
@@ -11,12 +12,22 @@ const sequelize = new Sequelize({
     dialect: "mysql"
 })
 
-sequelize.authenticate()
-.then(()=>{
-    console.log("Connected Successfully")
+// sequelize connect huna try gar vanne query:
+sequelize.authenticate().then(()=>{
+    console.log("Database connected Succesfully.")
 })
 .catch((err)=>{
-    console.log("Error Occured", err);
+console.log(" Error occured: ", err);
 })
 
-module.exports=sequelize;
+const db = {}
+// db.name = "node"
+
+db.blogModel = require("./../models/blogModel")(sequelize, DataTypes)
+
+
+sequelize.sync({alter: false}).then(() =>{//true xa vane database changes aauxa na vaye kei update hudaina database. kei update garna xa vane matra true rakhne natra false rakhne 
+    console.log("Migrated Successfully")
+})//Migration successfully
+
+module.exports = sequelize;
