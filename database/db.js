@@ -2,6 +2,7 @@
 const {Sequelize,DataTypes} = require("sequelize")  //Sequelize  bata db connection table banauna milxa
 require("dotenv").config()
 require("./../models/blogModel")
+require("./../models/userModel")
 console.log(process.env.password)
 const sequelize = new Sequelize({
     database:process.env.database_name,
@@ -24,10 +25,12 @@ const db = {}
 // db.name = "node"
 
 db.blogModel = require("./../models/blogModel")(sequelize, DataTypes)
+db.userModel = require("./../models/userModel")(sequelize, DataTypes)
 
 
-sequelize.sync({alter: false}).then(() =>{//true xa vane database changes aauxa na vaye kei update hudaina database. kei update garna xa vane matra true rakhne natra false rakhne 
+sequelize.sync({alter: true}).then(() =>{//true xa vane database changes aauxa na vaye kei update hudaina database. kei update garna xa vane matra true rakhne natra false rakhne 
     console.log("Migrated Successfully")
 })//Migration successfully
 
 module.exports = sequelize;
+module.exports = db;
