@@ -1,10 +1,11 @@
 const express = require("express")
 const app = express()
 const db =require("./database/db")
-
-app.use(express.urlencoded({extended:true}))
+const bcrypt = require("bcrypt")
 
 app.set("view engine","ejs")
+app.use(express.urlencoded({extended:true}))
+
 app.get("/",function(req,res){
     res.render("todo/get_todo")
 })
@@ -24,26 +25,20 @@ app.get("/register",function(req,res){
     res.render("authentication/register")
 })
 
-app.post('/register', async (req, res) => {  // Add 'async' here
+//Form bata value input leko
+app.post('/register', async (req, res) => {
     const { username, email, password } = req.body
     console.log(req.body)
-    
-    try {
-        await db.users.create({
-            username: username,
-            email,
-            password
-        })
-        
-        // Send success response
-        res.status(201).json({ message: 'User registered successfully' })
-        
-    } catch (error) {
-        // Handle errors (duplicate email, validation errors, etc.)
-        res.status(400).json({ error: error.message })
-    }
+
+    await db.userModel.create({
+        username: username,
+        email: email,
+        password: bcrypt.hashSync(password,10)
+    })
+    res.send("Registered Successfully")
 })
 
 app.listen(3000,function(){
     console.log("Port 3000 is Running.")
 })
+
