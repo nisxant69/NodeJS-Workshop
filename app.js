@@ -1,8 +1,13 @@
 const express = require("express")
 const app = express()
 const db =require("./database/db")
-const bcrypt = require("bcrypt")
+const bcrypt = 
+require("bcrypt")
 
+
+app.get("/",async (req,res)=>{
+    
+})
 app.set("view engine","ejs")
 app.use(express.urlencoded({extended:true}))
 
@@ -36,6 +41,19 @@ app.post('/register', async (req, res) => {
         password: bcrypt.hashSync(password,10)
     })
     res.send("Registered Successfully")
+})
+
+//Todo Store garne
+app.post('/addtodo', async (req, res) => {
+    const { task, description, date } = req.body
+    console.log(req.body)
+
+    await db.todoModel.create({
+        task: task,
+        description : description,
+        date : date
+    })
+    res.send("Todo List Updated  Successfully")
 })
 
 app.listen(3000,function(){

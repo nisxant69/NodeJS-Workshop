@@ -5,8 +5,54 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <title>Document</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
 </head>
-<body>
-    
+<body class="bg-gray-100">
+
+    <div class="container mx-auto my-10">
+        <h1 class="text-center text-3xl font-semibold mb-4">
+              To Do List
+        </h1>
+        <div class="md:w-1/2 mx-auto">
+            <div class="bg-white shadow-md rounded-lg p-6">
+                <form id="todoForm" action="/addtodo" method="POST">
+                    <div class="flex flex-col gap-4 mb-4">
+                        <input type="text"  
+                               class="w-full px-4 py-2 rounded-lg border-gray-300 focus:outline-none focus:border-blue-500" 
+                               id="task" 
+                               placeholder="Add new task" 
+                               name="task" 
+                               required>
+
+                        <input type="text"  
+                               class="w-full px-4 py-2 rounded-lg border-gray-300 focus:outline-none focus:border-blue-500" 
+                               id="description" 
+                               placeholder="Add description" 
+                               name="description" 
+                               required>
+
+                        <input type="date"  
+                               class="w-full px-4 py-2 rounded-lg border-gray-300 focus:outline-none focus:border-blue-500" 
+                               id="date" 
+                               name="date" 
+                               required>
+
+                        <select id="status" name="status" 
+                                class="w-full px-4 py-2 rounded-lg border-gray-300 focus:outline-none focus:border-blue-500">
+                            <option value="pending" selected>Pending</option>
+                            <option value="completed">Completed</option>
+                        </select>
+
+                        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" type="submit">
+                            Add
+                        </button>
+                    </div>
+                </form>
+                <ul id="todo-list">
+                    <!-- Tasks will be added here dynamically -->
+                </ul>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

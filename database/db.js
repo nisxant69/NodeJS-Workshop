@@ -3,6 +3,7 @@ const {Sequelize,DataTypes} = require("sequelize")  //Sequelize  bata db connect
 require("dotenv").config()
 require("./../models/blogModel")
 require("./../models/userModel")
+require("./../models/todoModel")
 console.log(process.env.password)
 const sequelize = new Sequelize({
     database:process.env.database_name,
@@ -26,6 +27,7 @@ const db = {}
 
 db.blogModel = require("./../models/blogModel")(sequelize, DataTypes)
 db.userModel = require("./../models/userModel")(sequelize, DataTypes)
+db.todoModel = require("./../models/todoModel")(sequelize, DataTypes)
 
 
 sequelize.sync({alter: true}).then(() =>{//true xa vane database changes aauxa na vaye kei update hudaina database. kei update garna xa vane matra true rakhne natra false rakhne 
