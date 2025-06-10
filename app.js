@@ -1,22 +1,18 @@
 const express = require("express")
 const app = express()
 const db =require("./database/db")
-const bcrypt = 
-require("bcrypt")
+const bcrypt = require("bcrypt")
 
 
 app.get("/",async (req,res)=>{
-    
+    const datas = await db.todoModel.findAll()
+    res.render("todo/get_todo",{datas:datas})
 })
 app.set("view engine","ejs")
 app.use(express.urlencoded({extended:true}))
 
-app.get("/",function(req,res){
-    res.render("todo/get_todo")
-})
-app.get("/get",function(req,res){
-    res.render("todo/get_todo")
-})
+
+
 app.get("/add",function(req,res){
     res.render("todo/add_todo")
 })
@@ -43,6 +39,26 @@ app.post('/register', async (req, res) => {
     res.send("Registered Successfully")
 })
 
+app.post("/login",async (req,res)=>{
+    const {email,password}=req.body
+    const users = await db.userModel.findAll({
+        where : {
+            email : email
+        }
+    })
+    
+    if(users.length == 0){
+        res.send("Email not registered")
+    } else {
+        //Check Password, first  plain password , second hashed password table ma store vako
+        const isPasswordMatch =  bcrypt.compareSync(password,users[0].password)
+        if(isPasswordMatch){
+            res.send("Logged in Successfully")
+        } else{
+            res.send("Invalid Email or Password")
+        }
+    }
+})
 //Todo Store garne
 app.post('/addtodo', async (req, res) => {
     const { task, description, date } = req.body
