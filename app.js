@@ -2,6 +2,7 @@ const express = require("express")
 const app = express()
 const db =require("./database/db")
 const bcrypt = require("bcrypt")
+const jwt = require("jsonwebtoken")
 
 
 app.get("/",async (req,res)=>{
@@ -53,6 +54,11 @@ app.post("/login",async (req,res)=>{
         //Check Password, first  plain password , second hashed password table ma store vako
         const isPasswordMatch =  bcrypt.compareSync(password,users[0].password)
         if(isPasswordMatch){
+            const token=jwt.sign({name:"nishant"},"secretkeyhola",{   //payload secondma private key
+                expiresIn:"1s" //Kati time ma expire hunxa
+            })
+            res.cookie("token",token)
+            res.send(token)
             res.send("Logged in Successfully")
         } else{
             res.send("Invalid Email or Password")
@@ -71,6 +77,8 @@ app.post('/addtodo', async (req, res) => {
     })
     res.send("Todo List Updated  Successfully")
 })
+
+
 
 app.listen(3000,function(){
     console.log("Port 3000 is Running.")
