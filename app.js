@@ -3,7 +3,9 @@ const app = express()
 const db =require("./database/db")
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
-
+const { isLoggedin } = require("./middleware/isLoggedin")
+const cookieParser = require("cookie-parser")   
+app.use(cookieParser())
 
 app.get("/",async (req,res)=>{
     const datas = await db.todoModel.findAll()
@@ -14,7 +16,7 @@ app.use(express.urlencoded({extended:true}))
 
 
 
-app.get("/add",function(req,res){
+app.get("/add", isLoggedin, function(req,res){
     res.render("todo/add_todo")
 })
 app.get("/update",function(req,res){
@@ -55,15 +57,17 @@ app.post("/login",async (req,res)=>{
         const isPasswordMatch =  bcrypt.compareSync(password,users[0].password)
         if(isPasswordMatch){
             const token=jwt.sign({name:"nishant"},"secretkeyhola",{   //payload secondma private key
-                expiresIn:"1s" //Kati time ma expire hunxa
+                expiresIn:"1d" //Kati time ma expire hunxa
             })
             res.cookie("token",token)
-            res.send(token)
-            res.send("Logged in Successfully")
+            // res.send(token)
+            // res.send("Logged in Successfully")
+            
         } else{
             res.send("Invalid Email or Password")
         }
     }
+    res.redirect("/")
 })
 //Todo Store garne
 app.post('/addtodo', async (req, res) => {
